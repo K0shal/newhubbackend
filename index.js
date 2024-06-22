@@ -1,8 +1,9 @@
 const express=require('express');
 const cors=require('cors');
+const dotenv=require('dotenv');
+dotenv.config();
 const app=express();
 app.use(express.json());
-const { convert }=require('html-to-text');
 app.use(cors());
 const { JSDOM }=require('jsdom');
 const axios=require('axios');
@@ -21,18 +22,44 @@ async function getArticleContent(url) {
 
 }
 
+async function getArticles({
+    query,page
+}) {
+    try {
+        let url=`/everything?q=${query}&pageSize=8&page=${page}&apiKey=${process.env.NEWS_API_KEY}`
+        const { data }=await axios.get(process.env.BASE_URL+url);
+        return data
+        console.log(data);
+    } catch (error) {
+        console.log(error);
+    }
+
+}
+
 app.get('/content',async (req,res) => {
     try {
         console.log(req.query.url);
-        res.json({ data: await getArticleContent(req.query.url) });
+        res.json(await getArticleContent(req.query.url));
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal server error');
     }
 
-}
+})
 
+app.get('/articles',async (req,res) => {
+    try {
+        console.log(req.query);
+        const { query,page }=req.query;
+        res.json({ data: await getArticles({ query,page }) });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Internal server error');
+    }
+}
 )
+
+
 const PORT=process.env.PORT||8000;
 app.listen(PORT,() => {
     console.log(`Server is running on port ${PORT}`);
