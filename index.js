@@ -11,7 +11,6 @@ const { Readability }=require('@mozilla/readability');
 
 
 async function getArticleContent(url) {
-    console.log(url);
     const { data }=await axios.get(url)
     let dom=new JSDOM(data,{
         url: url
@@ -40,7 +39,7 @@ async function getArticles({
 
 app.get('/content',async (req,res) => {
     try {
-
+        console.log(req.query.url);
         const data=await getArticleContent(req.query.url);
         return res.status(200).json({ ...data });
     } catch (error) {
