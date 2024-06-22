@@ -52,7 +52,7 @@ app.get('/articles',async (req,res) => {
     try {
         console.log(req.query);
         const { query,page }=req.query;
-        res.json( await getArticles({ query,page }) );
+        return   res.send(await getArticles({ query,page }));
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal server error');
