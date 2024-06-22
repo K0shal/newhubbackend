@@ -41,7 +41,7 @@ async function getArticles({
 app.get('/content',async (req,res) => {
     try {
         console.log(req.query.url);
-        return res.json({data:await getArticleContent(req.query.url)});
+        return res.status(200).json({data:await getArticleContent(req.query.url)});
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal server error');
@@ -53,7 +53,7 @@ app.get('/articles',async (req,res) => {
     try {
         console.log(req.query);
         const { query,page }=req.query;
-        return res.send(await getArticles({ query,page }));
+        return res.status(200).send(await getArticles({ query,page }));
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal server error');
@@ -63,7 +63,8 @@ app.get('/articles',async (req,res) => {
 
 
 const PORT=process.env.PORT||8000;
+
+
 app.listen(PORT,() => {
     console.log(`Server is running on port ${PORT}`);
-}
-)   
+})   
