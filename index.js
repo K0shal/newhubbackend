@@ -28,8 +28,9 @@ async function getArticles({
     try {
         let url=`/everything?q=${query}&pageSize=8&page=${page}&apiKey=${process.env.NEWS_API_KEY}`
         const { data }=await axios.get(process.env.BASE_URL+url);
+
         return data
-        console.log(data);
+
     } catch (error) {
         console.log(error);
     }
@@ -38,8 +39,9 @@ async function getArticles({
 
 app.get('/content',async (req,res) => {
     try {
-        console.log(req.query.url);
-        res.json(await getArticleContent(req.query.url));
+
+        const data=await getArticleContent("https://"+req.query.url);
+        return res.status(200).json({ ...data });
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal server error');
