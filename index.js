@@ -40,8 +40,7 @@ async function getArticles({
 app.get('/content',async (req,res) => {
     try {
         console.log(req.query.url);
-        const data=await getArticleContent(req.query.url);
-        return res.status(200).json({ ...data });
+        res.json(await getArticleContent(req.query.url));
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal server error');
@@ -53,7 +52,7 @@ app.get('/articles',async (req,res) => {
     try {
         console.log(req.query);
         const { query,page }=req.query;
-        res.json({ data: await getArticles({ query,page }) });
+        res.json( await getArticles({ query,page }) );
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal server error');
