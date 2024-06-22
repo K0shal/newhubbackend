@@ -18,6 +18,7 @@ async function getArticleContent(url) {
     let article=new Readability(dom.window.document).parse();
 
     // return sr.toString();
+    console.log(article?.textContent);
     return article?.textContent
 
 }
@@ -40,7 +41,7 @@ async function getArticles({
 app.get('/content',async (req,res) => {
     try {
         console.log(req.query.url);
-        res.json(await getArticleContent(req.query.url));
+        return res.json({data:await getArticleContent(req.query.url)});
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal server error');
@@ -52,7 +53,7 @@ app.get('/articles',async (req,res) => {
     try {
         console.log(req.query);
         const { query,page }=req.query;
-        return   res.send(await getArticles({ query,page }));
+        return res.send(await getArticles({ query,page }));
     } catch (error) {
         console.log(error);
         res.status(500).send('Internal server error');
